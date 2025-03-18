@@ -1,3 +1,4 @@
+#UPDATED
 import asyncio, os, betmgm, json, classes, re, aiohttp, caesars, draftkings, rivers, globals
 import subprocess
 from datetime import datetime
