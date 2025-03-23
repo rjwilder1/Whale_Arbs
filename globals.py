@@ -13,6 +13,7 @@ DraftKings = config.getboolean('DEFAULT', 'DraftKings')
 Rivers = config.getboolean('DEFAULT', 'Rivers')
 cashoutloss = 0
 NeedToClearBets = False
+Version = config.get('DEFAULT', 'Version')
 
 async def checkmsgs():
     try:

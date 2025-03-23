@@ -1,4 +1,3 @@
-#UPDATED
 from datetime import datetime
 import asyncio, os, classes, aiohttp, json, globals, requests
 from patchright.async_api import async_playwright, Page, ElementHandle

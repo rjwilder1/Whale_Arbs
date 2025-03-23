@@ -1,4 +1,3 @@
-#UPDATED
 import asyncio, os, betmgm, json, classes, re, aiohttp, caesars, draftkings, rivers, globals
 import subprocess
 from datetime import datetime
@@ -15,9 +14,9 @@ class Main:
         self.caesarsbrowser = None
         self.placingbet = False
         self.timetorun = True
-        self.refreshtime = False
         self.refreshrivers = False
         self.last_run_minute = None
+        
         
         self.TotalStake = globals.TotalStake
         self.discordid = globals.discordid
@@ -28,6 +27,7 @@ class Main:
         self.DraftKings = globals.DraftKings
         self.Rivers = globals.Rivers
         #self.Caesars = globals.Caesars
+
 
         self.newarbs = []
         self.oldbets = []
@@ -45,25 +45,6 @@ class Main:
         await self.sendmsg(f"{firsttext} {betstosend}{extra}", title="Found Arbitrage", color=13421568)
 
     async def arbupdate(self, response):
-        currtime = datetime.now().strftime("%H:%M")
-        lastnumb = int(currtime[-1])
-
-        if (lastnumb == 0 or lastnumb == 5) and self.last_run_minute != currtime:
-            self.last_run_minute = currtime
-            try:
-                if not self.refreshtime:
-                    self.refreshtime = True
-                    await self.draftkingsbrowser.goto("https://sportsbook.draftkings.com/mybets")
-                    await self.riversbrowser.goto("https://il.betrivers.com/?page=my-account")
-                else:
-                    self.refreshtime = False
-                    await self.draftkingsbrowser.goto("https://sportsbook.draftkings.com/auth")
-                    await self.riversbrowser.goto("https://il.betrivers.com/?page=sportsbook#bethistory/")
-            except Exception as e:
-                globals.Log(f"Error refreshing DraftKings and Rivers: {e}")
-            #await self.sendmsg(title="Reloaded Pages")
-            await asyncio.sleep(5)
-
         arbon = 0
         self.allarbs = globals.load_existing_bet_ids()
         self.newarbs.clear()
@@ -101,7 +82,7 @@ class Main:
                                 for bet in arb_data.get("bets", [])
                             ]
                         )
-                        
+
                         if arb.bet_id not in self.unavailablearbs:
                             found = False
                             for i in arb.bets:
@@ -272,12 +253,11 @@ class Main:
                                                         await self.sendmsg2(f"[{arbct}] {betstosend}", title="Failed Due To Bet Slip Not Adding", color=16711680, image_path=imagetosend)
                                                         if imagetosend2: await self.sendmsg2(image_path=imagetosend2)
                                                         self.failed += 1    
-
                             self.placingbet = False
 
                         except Exception as e:
                             globals.Log(f"Error placing bet!: {e}")
-                    await asyncio.sleep(5)
+                            
                     if globals.NeedToClearBets == True:
                         globals.NeedToClearBets = False
                         try:
@@ -286,6 +266,21 @@ class Main:
                             await asyncio.gather(clear1, clear2)
                         except Exception as e:
                             globals.Log(f"Failed to clear bets: {e}")
+
+                    currtime = datetime.now().strftime("%H:%M")
+                    lastnumb = int(currtime[-1])
+                    if (lastnumb == 0 or lastnumb == 5) and self.last_run_minute != currtime:
+                        self.last_run_minute = currtime
+                        try:
+                            if lastnumb == 0:
+                                await self.draftkingsbrowser.goto("https://sportsbook.draftkings.com/mybets")
+                                await self.riversbrowser.goto("https://il.betrivers.com/?page=my-account")
+                            else:
+                                await self.draftkingsbrowser.goto("https://sportsbook.draftkings.com/auth")
+                                await self.riversbrowser.goto("https://il.betrivers.com/?page=sportsbook#bethistory/")
+                        except Exception as e:
+                            globals.Log(f"Error refreshing DraftKings and Rivers: {e}")
+                    await asyncio.sleep(5)
 
                     self.placingbet = False
                     reloaded = False
@@ -560,7 +555,7 @@ class Main:
         #input(p)
         a = await draftkings.placebetrequest(page = self.draftkingsbrowser, url=bet.desktop_url, bet=bet, stake=0.1)
         input(a)
-
+print("Initializing...")
 if __name__ == "__main__":
     main = Main()
     asyncio.run(main.start())
