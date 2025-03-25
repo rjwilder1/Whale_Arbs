@@ -489,11 +489,28 @@ class Main:
                             await refreshbutton.click()
                     else:
                         await self.sendmsg2(title = "Whale arbs already running!", msg = "", color = 16711680)
+
                 if "/update" in msgcontent:
                     await self.sendmsg2("Upating files to latest version...", title="Updating Files", color=65280)
                     command = f'start cmd.exe /k python update.py'
                     subprocess.Popen(command, shell=True)
                     exit()
+
+                if "/launch " in msgcontent:
+                    msg = msgcontent.replace("/launch ", "")
+                    await self.sendmsg2(f"Attempting to launch command: **{msg}**", title="Launching Application", color=65280)
+                    command = f'start "" "{msg}"'
+                    subprocess.Popen(command, shell=True)
+                    await self.sendmsg2(f"Launched command: **{msg}**", title="Launched Application", color=65280)
+
+                if "/runanydesk" in msgcontent:
+                    await self.sendmsg2(f"Launching Anydesk", title="Launching Anydesk", color=65280)
+                    command = f'start cmd.exe /k anydesk.exe'
+                    subprocess.Popen(command, shell=True)
+
+                if "/closeanydesk" in msgcontent:
+                    await self.sendmsg2(f"Closing all Anydesk Processes", title="Closing Anydesk", color=65280)
+                    subprocess.call('taskkill /F /IM AnyDesk.exe', shell=True)
 
                 if "/pause" in msgcontent:
                     if self.timetorun == True:
@@ -501,6 +518,7 @@ class Main:
                         self.timetorun = False
                     else:
                         await self.sendmsg2(title = "Whale arbs already paused!", msg = "", color = 16711680)
+
                 if "/reload" in msgcontent:
                     await self.sendmsg2(title = "Reloading all browsers...", msg = "", color = 65280)
                     self.placingbet = True
@@ -555,6 +573,7 @@ class Main:
         #input(p)
         a = await draftkings.placebetrequest(page = self.draftkingsbrowser, url=bet.desktop_url, bet=bet, stake=0.1)
         input(a)
+
 print("Initializing...")
 if __name__ == "__main__":
     main = Main()
