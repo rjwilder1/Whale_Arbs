@@ -107,7 +107,7 @@ def getarbtext(arb):
     return f"""**Bet ID:** {arb.bet_id}
 **Live:** {arb.is_live}
 **Game Status:** {arb.in_game_status}
-**Profit Precentage:** ${round(float(int(TotalStake) / (float(arb.percentage) / 100))), 2} ({arb.percentage}%)\n
+**Profit Precentage:** ${round(float(int(TotalStake) / (float(arb.percentage) / 100)), 2)} ({arb.percentage}%)\n
 **-----------[Bet 1]-----------**
 **Bet:** {arb.bets[0].bet_name}
 **Sportsbook:** {arb.bets[0].sportsbooks[0]}
