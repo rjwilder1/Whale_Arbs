@@ -1,5 +1,4 @@
-import asyncio, os, betmgm, json, classes, re, aiohttp, caesars, draftkings, rivers, globals
-import subprocess
+import asyncio, os, betmgm, json, classes, re, aiohttp, caesars, draftkings, rivers, globals, ctypes, sys, subprocess
 from datetime import datetime
 from patchright.async_api import async_playwright
 
@@ -574,6 +573,17 @@ class Main:
         a = await draftkings.placebetrequest(page = self.draftkingsbrowser, url=bet.desktop_url, bet=bet, stake=0.1)
         input(a)
 
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
+
+if not is_admin():
+    ctypes.windll.shell32.ShellExecuteW(
+        None, "runas", sys.executable, ' '.join(sys.argv), None, 1
+    )
+    
 print("Initializing...")
 if __name__ == "__main__":
     main = Main()

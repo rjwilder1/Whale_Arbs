@@ -464,6 +464,7 @@ async def newbet(page: Page, bet: classes.Bet):
 async def checklogin(page: Page):
     try:
         loginbutton = await page.query_selector('a[data-test-id="Log In-cta-link"]')
+        verifybutton = await page.query_selector('a[data-test-id="Verify Account-cta-link"]')
         if loginbutton:
             await page.goto("https://myaccount.draftkings.com/login?", timeout=30000)
             await asyncio.sleep(2)
@@ -479,6 +480,10 @@ async def checklogin(page: Page):
                 await asyncio.sleep(1)
                 avatar = await page.query_selector('div[data-test-id="account-dropdown"]')
             await sendmsg("Draftkings: Logged back in...", title="Login", color=65280)
+            return False
+        elif verifybutton:
+            await page.goto("https://sportsbook.draftkings.com/auth")
+            await sendmsg("Verification needed for DraftKings, attempting to automate verification...", title="Verification", color=16711680)
             return False
     except Exception as e:
         print(f"Error in checklogin Draftkings: {e}")
