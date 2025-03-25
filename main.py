@@ -434,10 +434,6 @@ class Main:
             await self.checkdiscord()
             await asyncio.sleep(1)
 
-
-
-    
-
     async def checkdiscord(self):
         try:
             msgs = await globals.checkmsgs()
